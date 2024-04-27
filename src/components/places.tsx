@@ -39,8 +39,8 @@ export default function Places({ setOffice }: PlacesProps) {
         value={value}
         onChange={(e: any) => setValue(e.target.value)}
         disabled={!ready}
-        className="text-black border-2 p-2 border-green-600 focus:outline-yellow-500 rounded-md w-full my-2"
-        placeholder="Search office address"
+        className="text-black border-2 p-2 border-green-600 focus:outline-yellow-500 rounded-md -z-20 w-full my-2"
+        placeholder="Search an address"
       />
       <ComboboxPopover>
         <ComboboxList>

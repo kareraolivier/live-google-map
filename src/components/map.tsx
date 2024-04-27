@@ -60,18 +60,6 @@ export default function Map() {
           Karera's googleMap.
         </h1>
         {!office && <p>Enter the address you want</p>}
-
-        <div>
-          <p className="font-semibold text-lg text-green-400">
-            Curent location
-          </p>
-          <Places
-            setOffice={(position) => {
-              setOffice(position);
-              mapRef.current?.panTo(position);
-            }}
-          />
-        </div>
         <div>
           <p className="font-semibold text-lg text-blue-500">Destination</p>
           <Places
@@ -107,10 +95,7 @@ export default function Map() {
 
           {office && (
             <>
-              <Marker
-                position={office}
-                icon="https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png"
-              />
+              <Marker position={office} />
 
               <MarkerClusterer>
                 {(clusterer) => (
@@ -127,9 +112,9 @@ export default function Map() {
                 )}
               </MarkerClusterer>
 
-              <Circle center={office} radius={15000} options={closeOptions} />
-              <Circle center={office} radius={30000} options={middleOptions} />
-              <Circle center={office} radius={45000} options={farOptions} />
+              <Circle center={office} radius={10000} options={closeOptions} />
+              <Circle center={office} radius={20000} options={middleOptions} />
+              <Circle center={office} radius={35000} options={farOptions} />
             </>
           )}
         </GoogleMap>
@@ -137,7 +122,7 @@ export default function Map() {
     </div>
   );
 }
-
+4010111405278;
 const defaultOptions = {
   strokeOpacity: 0.5,
   strokeWeight: 2,

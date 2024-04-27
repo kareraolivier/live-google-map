@@ -13,8 +13,12 @@ type LatLngLiteral = google.maps.LatLngLiteral;
 type DirectionsResult = google.maps.DirectionsResult;
 type MapOptions = google.maps.MapOptions;
 
+const nightId = process.env.NEXT_PUBLIC_GOOGLE_MAPS_NIGHT_ID;
+const dayId = process.env.NEXT_PUBLIC_GOOGLE_MAPS_DAIRY_ID;
+
 export default function Map() {
   const [office, setOffice] = useState<LatLngLiteral>();
+  const [isChecked, setIsChecked] = useState<boolean>(false);
   const [directions, setDirections] = useState<DirectionsResult>();
   const mapRef = useRef<GoogleMap>();
   const center = useMemo<LatLngLiteral>(
@@ -23,11 +27,11 @@ export default function Map() {
   );
   const options = useMemo<MapOptions>(
     () => ({
-      mapId: "b181cac70f27f5e6",
+      mapId: isChecked ? nightId : dayId,
       disableDefaultUI: true,
       clickableIcons: false,
     }),
-    []
+    [isChecked]
   );
   const onLoad = useCallback(
     (map: GoogleMap | undefined | any) => (mapRef.current = map),
@@ -56,9 +60,25 @@ export default function Map() {
   return (
     <div className="w-full">
       <div className="controls absolute z-10 top-2 left-2 rounded-md p-2">
-        <h1 className="pb-4 text-red-500 font-bold text-xl">
-          Karera's googleMap.
-        </h1>
+        <div className="flex justify-between items-center">
+          <h1 className="pb-4 text-red-500 font-bold text-xl">
+            Karera's googleMap.
+          </h1>
+          <label className="flex gap-2 items-center cursor-pointer">
+            <span className="ms-3 text-sm font-medium text-gray-900">
+              Darkmode
+            </span>
+            <input
+              type="checkbox"
+              value=""
+              className="sr-only peer"
+              checked={isChecked}
+              onChange={() => setIsChecked((prevState) => !prevState)}
+            />
+            <div className="relative w-11 h-6 bg-gray-200 rounded-full dark:peer-focus:ring-green-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600"></div>
+          </label>
+        </div>
+
         {!office && <p>Enter the address you want</p>}
         <div>
           <p className="font-semibold text-lg text-blue-500">Destination</p>
@@ -74,6 +94,7 @@ export default function Map() {
       </div>
       <div className="w-full h-screen">
         <GoogleMap
+          key={isChecked ? "night" : "day"}
           zoom={10}
           center={center}
           mapContainerClassName="w-full h-screen"

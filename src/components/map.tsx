@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useRef } from "react";
+import { useState, useMemo, useCallback, useRef, useEffect } from "react";
 import {
   GoogleMap,
   Marker,
@@ -20,11 +20,25 @@ export default function Map() {
   const [office, setOffice] = useState<LatLngLiteral>();
   const [isChecked, setIsChecked] = useState<boolean>(false);
   const [directions, setDirections] = useState<DirectionsResult>();
+  const [center, setCenter] = useState({ lat: 0, lng: 0 });
   const mapRef = useRef<GoogleMap>();
-  const center = useMemo<LatLngLiteral>(
-    () => ({ lat: 43.45, lng: -80.49 }),
-    []
-  );
+
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setCenter({ lat: latitude, lng: longitude });
+        },
+        (error) => {
+          console.error("Error getting current location:", error);
+        }
+      );
+    } else {
+      console.error("Geolocation is not supported by this browser.");
+    }
+  }, [navigator.geolocation]);
+
   const nightOptions = useMemo<MapOptions>(
     () => ({
       mapId: nightId,

@@ -59,7 +59,7 @@ export default function Map() {
     (map: GoogleMap | undefined | any) => (mapRef.current = map),
     []
   );
-  const houses = useMemo(() => generateHouses(center), [center]);
+  const locations = useMemo(() => generateLocations(center), [center]);
 
   const fetchDirections = (house: LatLngLiteral) => {
     if (!office) return;
@@ -83,7 +83,9 @@ export default function Map() {
     <div className="w-full">
       <div className="controls absolute z-10 top-2 left-2 rounded-md p-2">
         <div className="flex justify-between items-center">
-          <h1 className="pb-4 text-red-500 font-bold text-xl">Karera's Map.</h1>
+          <h1 className="pb-4 text-blue-500 font-bold text-xl">
+            Karera's Map.
+          </h1>
           <label className="flex gap-2 items-center cursor-pointer">
             <span className="ms-3 text-sm font-medium text-gray-900">
               Darkmode
@@ -99,9 +101,11 @@ export default function Map() {
           </label>
         </div>
 
-        {!office && <p>Enter the address you want</p>}
+        {!office && (
+          <p className="text-yellow-500">Enter the address you want</p>
+        )}
         <div>
-          <p className="font-semibold text-lg text-blue-500">Destination</p>
+          <p className="font-semibold text-lg text-green-500">Destination</p>
           <Places
             setOffice={(position) => {
               setOffice(position);
@@ -141,7 +145,7 @@ export default function Map() {
               <MarkerClusterer>
                 {(clusterer) => (
                   <>
-                    {houses.map((house: LatLngLiteral) => (
+                    {locations.map((house: LatLngLiteral) => (
                       <Marker
                         key={house.lat}
                         position={house}
@@ -193,14 +197,14 @@ const farOptions = {
   fillColor: "#FF5252",
 };
 
-const generateHouses = (position: LatLngLiteral) => {
-  const _houses: Array<LatLngLiteral> = [];
+const generateLocations = (position: LatLngLiteral) => {
+  const _locations: Array<LatLngLiteral> = [];
   for (let i = 0; i < 100; i++) {
     const direction = Math.random() < 0.5 ? -2 : 2;
-    _houses.push({
+    _locations.push({
       lat: position.lat + Math.random() / direction,
       lng: position.lng + Math.random() / direction,
     });
   }
-  return _houses;
+  return _locations;
 };

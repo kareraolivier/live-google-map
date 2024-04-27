@@ -143,7 +143,6 @@ export default function Map() {
     </div>
   );
 }
-4010111405278;
 const defaultOptions = {
   strokeOpacity: 0.5,
   strokeWeight: 2,

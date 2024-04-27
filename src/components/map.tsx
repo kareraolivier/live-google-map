@@ -54,23 +54,41 @@ export default function Map() {
   };
 
   return (
-    <div className="container">
-      <div className="controls">
-        <h1 className="py-4 text-red-500 font-bold">Map locations?</h1>
-        {!office && <p>Enter the address of your destination.</p>}
-        <Places
-          setOffice={(position) => {
-            setOffice(position);
-            mapRef.current?.panTo(position);
-          }}
-        />
+    <div className="w-full">
+      <div className="controls absolute z-10 top-2 left-2 rounded-md p-2">
+        <h1 className="pb-4 text-red-500 font-bold text-xl">
+          Karera's googleMap.
+        </h1>
+        {!office && <p>Enter the address you want</p>}
+
+        <div>
+          <p className="font-semibold text-lg text-green-400">
+            Curent location
+          </p>
+          <Places
+            setOffice={(position) => {
+              setOffice(position);
+              mapRef.current?.panTo(position);
+            }}
+          />
+        </div>
+        <div>
+          <p className="font-semibold text-lg text-blue-500">Destination</p>
+          <Places
+            setOffice={(position) => {
+              setOffice(position);
+              mapRef.current?.panTo(position);
+            }}
+          />
+        </div>
+
         {directions && <Distance leg={directions.routes[0].legs[0]} />}
       </div>
-      <div className="map w-full">
+      <div className="w-full h-screen">
         <GoogleMap
           zoom={10}
           center={center}
-          mapContainerClassName="map-container"
+          mapContainerClassName="w-full h-screen"
           options={options}
           onLoad={onLoad}
         >

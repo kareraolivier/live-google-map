@@ -61,13 +61,13 @@ export default function Map() {
   );
   const locations = useMemo(() => generateLocations(center), [center]);
 
-  const fetchDirections = (house: LatLngLiteral) => {
+  const fetchDirections = (location: LatLngLiteral) => {
     if (!office) return;
 
     const service = new google.maps.DirectionsService();
     service.route(
       {
-        origin: house,
+        origin: location,
         destination: office,
         travelMode: google.maps.TravelMode.DRIVING,
       },
@@ -145,12 +145,12 @@ export default function Map() {
               <MarkerClusterer>
                 {(clusterer) => (
                   <>
-                    {locations.map((house: LatLngLiteral) => (
+                    {locations.map((location: LatLngLiteral) => (
                       <Marker
-                        key={house.lat}
-                        position={house}
+                        key={location.lat}
+                        position={location}
                         clusterer={clusterer}
-                        onClick={() => fetchDirections(house)}
+                        onClick={() => fetchDirections(location)}
                       />
                     ))}
                   </>
@@ -160,6 +160,7 @@ export default function Map() {
               <Circle center={office} radius={10000} options={closeOptions} />
               <Circle center={office} radius={20000} options={middleOptions} />
               <Circle center={office} radius={35000} options={farOptions} />
+              <Circle center={office} radius={50000} options={VeryFarOptions} />
             </>
           )}
         </GoogleMap>
@@ -177,26 +178,32 @@ const defaultOptions = {
 };
 const closeOptions = {
   ...defaultOptions,
-  zIndex: 3,
+  zIndex: 4,
   fillOpacity: 0.05,
   strokeColor: "#8BC34A",
   fillColor: "#8BC34A",
 };
 const middleOptions = {
   ...defaultOptions,
-  zIndex: 2,
+  zIndex: 3,
   fillOpacity: 0.05,
   strokeColor: "#FBC02D",
   fillColor: "#FBC02D",
 };
 const farOptions = {
   ...defaultOptions,
-  zIndex: 1,
+  zIndex: 2,
   fillOpacity: 0.05,
   strokeColor: "#FF5252",
   fillColor: "#FF5252",
 };
-
+const VeryFarOptions = {
+  ...defaultOptions,
+  zIndex: 1,
+  fillOpacity: 0.05,
+  strokeColor: "#000000",
+  fillColor: "#000000",
+};
 const generateLocations = (position: LatLngLiteral) => {
   const _locations: Array<LatLngLiteral> = [];
   for (let i = 0; i < 100; i++) {

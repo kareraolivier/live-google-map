@@ -25,9 +25,17 @@ export default function Map() {
     () => ({ lat: 43.45, lng: -80.49 }),
     []
   );
-  const options = useMemo<MapOptions>(
+  const nightOptions = useMemo<MapOptions>(
     () => ({
-      mapId: isChecked ? nightId : dayId,
+      mapId: nightId,
+      disableDefaultUI: true,
+      clickableIcons: false,
+    }),
+    [isChecked]
+  );
+  const dayOptions = useMemo<MapOptions>(
+    () => ({
+      mapId: dayId,
       disableDefaultUI: true,
       clickableIcons: false,
     }),
@@ -96,7 +104,7 @@ export default function Map() {
           zoom={10}
           center={center}
           mapContainerClassName="w-full h-screen"
-          options={options}
+          options={isChecked ? nightOptions : dayOptions}
           onLoad={onLoad}
         >
           {directions && (

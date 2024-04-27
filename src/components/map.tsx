@@ -61,9 +61,7 @@ export default function Map() {
     <div className="w-full">
       <div className="controls absolute z-10 top-2 left-2 rounded-md p-2">
         <div className="flex justify-between items-center">
-          <h1 className="pb-4 text-red-500 font-bold text-xl">
-            Karera's googleMap.
-          </h1>
+          <h1 className="pb-4 text-red-500 font-bold text-xl">Karera's Map.</h1>
           <label className="flex gap-2 items-center cursor-pointer">
             <span className="ms-3 text-sm font-medium text-gray-900">
               Darkmode

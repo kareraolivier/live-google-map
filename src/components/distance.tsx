@@ -1,3 +1,4 @@
+import { IoClose } from "react-icons/io5";
 import { useState } from "react";
 
 type DistanceProps = {
@@ -53,7 +54,7 @@ export default function Distance({ leg, mode }: DistanceProps) {
         onClick={handleToggle}
         className="text-right text-sm mb-2 text-red-600"
       >
-        Close
+        <IoClose color="red" />
       </button>
       <p>
         This place is <span className="highlight">{leg.distance.text}</span>{" "}

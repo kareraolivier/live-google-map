@@ -13,9 +13,10 @@ import "@reach/combobox/styles.css";
 
 type PlacesProps = {
   setOffice: (position: google.maps.LatLngLiteral) => void;
+  isChecked: boolean;
 };
 
-export default function Places({ setOffice }: PlacesProps) {
+export default function Places({ setOffice, isChecked }: PlacesProps) {
   const {
     ready,
     value,
@@ -39,7 +40,7 @@ export default function Places({ setOffice }: PlacesProps) {
         value={value}
         onChange={(e: any) => setValue(e.target.value)}
         disabled={!ready}
-        className="text-black border-2 p-2 border-green-600 focus:outline-yellow-500 rounded-md -z-20 w-full my-2"
+        className={`text-black border-2 p-2 ${isChecked ? "border-blue-700" : "border-green-500"} focus:outline-yellow-500 rounded-md -z-20 w-full my-2`}
         placeholder="Search an address"
       />
       <ComboboxPopover>

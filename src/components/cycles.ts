@@ -31,6 +31,6 @@ export const VeryFarOptions = {
   ...defaultOptions,
   zIndex: 1,
   fillOpacity: 0.05,
-  strokeColor: "#000000",
-  fillColor: "#000000",
+  strokeColor: "#4f88e3",
+  fillColor: "#4f88e3",
 };

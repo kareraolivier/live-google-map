@@ -28,12 +28,12 @@ export default function Distance({ leg, mode }: DistanceProps) {
     case "bicycle":
       modeLabel = "bicycle";
       modeIcon = "🚴";
-      time = leg.distance.value / 15000; // Assume average biking speed of 15 km/h
+      time = leg.distance.value / 10000; // Assume average biking speed of 15 km/h
       break;
     case "onfoot":
       modeLabel = "on foot";
       modeIcon = "🚶";
-      time = leg.distance.value / 5000; // Assume average walking speed of 5 km/h
+      time = leg.distance.value / 4000; // Assume average walking speed of 5 km/h
       break;
     default:
       modeLabel = "unknown mode";

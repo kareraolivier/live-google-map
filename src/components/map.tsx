@@ -8,6 +8,14 @@ import {
 } from "@react-google-maps/api";
 import Places from "./places";
 import Distance from "./distance";
+import Loader from "./loader";
+import { generateLocations } from "./helpers";
+import {
+  closeOptions,
+  middleOptions,
+  farOptions,
+  VeryFarOptions,
+} from "./cycles";
 
 type LatLngLiteral = google.maps.LatLngLiteral;
 type DirectionsResult = google.maps.DirectionsResult;
@@ -22,6 +30,7 @@ export default function Map() {
   const [directions, setDirections] = useState<DirectionsResult>();
   const [center, setCenter] = useState({ lat: 0, lng: 0 });
   const mapRef = useRef<GoogleMap>();
+  const mapLoaded = useRef<boolean>(false);
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -55,10 +64,10 @@ export default function Map() {
     }),
     [isChecked]
   );
-  const onLoad = useCallback(
-    (map: GoogleMap | undefined | any) => (mapRef.current = map),
-    []
-  );
+  const onLoad = useCallback((map: GoogleMap | undefined | any) => {
+    mapRef.current = map;
+    mapLoaded.current = true;
+  }, []);
   const locations = useMemo(() => generateLocations(center), [center]);
 
   const fetchDirections = (location: LatLngLiteral) => {
@@ -81,14 +90,15 @@ export default function Map() {
 
   return (
     <div className="w-full">
+      {!mapLoaded.current && <Loader />}
       <div className="controls absolute z-10 top-2 left-2 rounded-md p-2">
         <div className="flex justify-between items-center">
-          <h1 className="pb-4 text-blue-500 font-bold text-xl">
+          <h1 className="pb-4 text-green-500 font-bold text-xl">
             Karera's Map.
           </h1>
           <label className="flex gap-2 items-center cursor-pointer">
             <span className="ms-3 text-sm font-medium text-gray-900">
-              Darkmode
+              Nightmode
             </span>
             <input
               type="checkbox"
@@ -102,7 +112,7 @@ export default function Map() {
         </div>
 
         {!office && (
-          <p className="text-yellow-500">Enter the address you want</p>
+          <p className="text-green-500">Enter the address you want</p>
         )}
         <div>
           <p className="font-semibold text-lg text-green-500">Destination</p>
@@ -114,7 +124,14 @@ export default function Map() {
           />
         </div>
 
-        {directions && <Distance leg={directions.routes[0].legs[0]} />}
+        {directions && (
+          <>
+            <Distance leg={directions.routes[0].legs[0]} mode="car" />
+            <Distance leg={directions.routes[0].legs[0]} mode="bike" />
+            <Distance leg={directions.routes[0].legs[0]} mode="onfoot" />
+            <Distance leg={directions.routes[0].legs[0]} mode="bicycle" />
+          </>
+        )}
       </div>
       <div className="w-full h-screen">
         <GoogleMap
@@ -137,6 +154,7 @@ export default function Map() {
               }}
             />
           )}
+          {center && <Marker position={center} />}
 
           {office && (
             <>
@@ -168,50 +186,3 @@ export default function Map() {
     </div>
   );
 }
-const defaultOptions = {
-  strokeOpacity: 0.5,
-  strokeWeight: 2,
-  clickable: false,
-  draggable: false,
-  editable: false,
-  visible: true,
-};
-const closeOptions = {
-  ...defaultOptions,
-  zIndex: 4,
-  fillOpacity: 0.05,
-  strokeColor: "#8BC34A",
-  fillColor: "#8BC34A",
-};
-const middleOptions = {
-  ...defaultOptions,
-  zIndex: 3,
-  fillOpacity: 0.05,
-  strokeColor: "#FBC02D",
-  fillColor: "#FBC02D",
-};
-const farOptions = {
-  ...defaultOptions,
-  zIndex: 2,
-  fillOpacity: 0.05,
-  strokeColor: "#FF5252",
-  fillColor: "#FF5252",
-};
-const VeryFarOptions = {
-  ...defaultOptions,
-  zIndex: 1,
-  fillOpacity: 0.05,
-  strokeColor: "#000000",
-  fillColor: "#000000",
-};
-const generateLocations = (position: LatLngLiteral) => {
-  const _locations: Array<LatLngLiteral> = [];
-  for (let i = 0; i < 100; i++) {
-    const direction = Math.random() < 0.5 ? -2 : 2;
-    _locations.push({
-      lat: position.lat + Math.random() / direction,
-      lng: position.lng + Math.random() / direction,
-    });
-  }
-  return _locations;
-};

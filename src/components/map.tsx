@@ -73,7 +73,7 @@ export default function Map() {
 
   const locations = useMemo(() => {
     if (!office) return;
-    return generateLocations(office);
+    return generateLocations(center);
   }, [office]);
 
   const fetchDirections = (location: LatLngLiteral) => {
